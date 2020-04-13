@@ -30,10 +30,11 @@ const decodeString = s => {
                 pointer++
             }
             
-            newStr = decodeString(s.slice(openIdx, closeIdx))
-            string+=newStr.repeat(number)
+            string+=decodeString(s.slice(openIdx, closeIdx)).repeat(number)
             // can change the for loop pointer with this reassignment.
-            i=pointer
+            // this prevents the loop from going over the items that are already being processed by another loop
+            // in the recursive tree :)
+            i = pointer
 
         } else {
             string+=s[i]
