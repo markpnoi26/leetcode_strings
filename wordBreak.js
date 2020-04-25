@@ -17,9 +17,10 @@ const wordBreak = (s, wordDict) => {
 
     for (let i = 1; i<=s.length; i++) {
         for (let j = 0; j<i; j++) {
-            let currWord = s.substring(i, j)
+            let currWord = s.substring(j, i)
             if (words[currWord] && ending[j]) {
                 ending[i] = true
+                break
             }
         }
     }
