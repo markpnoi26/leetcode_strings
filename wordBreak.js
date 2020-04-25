@@ -4,45 +4,28 @@
  * @return {boolean}
  */
 const wordBreak = (s, wordDict) => {
-    const usedLetter = new Array(s.length).fill(false)
-    const letterIdx = {}
-    const wordsLen = []
-    let overLap = false
+    // improve lookup time of wordDict
+    const ending = new Array(s.length + 1).fill(false)
+    const words = {}
+    // start has to be true, because the ending from previous word must be true in order to complete the word.
+    ending[0] = true
+    const end = ending.length-1
 
-    // set up wordLength and idx of each first letter
-    for (let i = 0; i<wordDict.length; i++) {
-        if (wordDict[i][0] !== undefined) {
-            letterIdx[wordDict[i][0]] = []
-            wordsLen.push(wordDict[i].length)
-        }
+    for (let word of wordDict) {
+        words[word] = true
     }
 
-    // find all starting idx (perhaps not necessary, we can do a single pass through s and figure it out from there)
-    for (let i=0; i<s.length; i++) {
-        if (letterIdx[s[i]] === undefined) continue
-        letterIdx[s[i]].push(i)
-    }
-
-    for (let i = 0; i<wordDict.length; i++) {
-        const stLetter = wordDict[i][0]
-        const wordLen = wordsLen[i]
-        for (let idx of letterIdx[stLetter]) {
-            if (s.substring(idx, idx+wordLen) === wordDict[i]) {
-                let set = usedLetter[idx]
-                for (let j=idx; j<idx+wordLen; j++) {
-                    if (set === usedLetter[j]) {
-                        usedLetter[j] = true
-                    } 
-                }
+    for (let i = 1; i<=s.length; i++) {
+        for (let j = 0; j<i; j++) {
+            let currWord = s.substring(i, j)
+            if (words[currWord] && ending[j]) {
+                ending[i] = true
             }
         }
-
     }
 
-    for (let boolean of usedLetter) {
-        if (boolean === false) return false
-    }
-    return true
+    return ending[end]
+    
 };
 
 
